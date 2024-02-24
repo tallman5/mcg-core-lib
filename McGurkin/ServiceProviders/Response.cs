@@ -1,8 +1,5 @@
 ﻿namespace McGurkin.ServiceProviders
 {
-    public enum ResponseType
-    { Success, Warning, Error }
-
     public partial interface IResponse
     {
         Guid RequestId { get; set; }
@@ -27,7 +24,7 @@
             message = ex.ToString();
 #endif
             AppendMessage(message);
-            ResponseType = ResponseType.Error;
+            ResponseType = ResponseTypes.Error;
         }
 
         public void AppendMessage(string format, params object[] args)
@@ -52,7 +49,7 @@
         {
             ResponseId = responseId;
             RequestId = requestId;
-            ResponseType = ResponseType.Success;
+            ResponseType = ResponseTypes.Success;
         }
 
         public virtual Guid ResponseId { get; set; }

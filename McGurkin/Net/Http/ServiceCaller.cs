@@ -55,8 +55,12 @@ namespace McGurkin.Net.Http
         public static async Task<HttpResponseMessage> PostAsync(HttpClient httpClient, string url, object o, string? bearerToken, Dictionary<string, string>? headers)
         {
             ApplySettings(httpClient, bearerToken, headers);
+
+            StringContent? content = null;
             var objectString = (o is string) ? o as string : Serializer.ToString(o);
-            var content = new StringContent(objectString, Encoding.UTF8, "application/json");
+            if(!string.IsNullOrWhiteSpace(objectString))
+                content = new StringContent(objectString, Encoding.UTF8, "application/json");
+
             var returnValue = await httpClient.PostAsync(url, content);
             return ProcessResponse(returnValue);
         }
