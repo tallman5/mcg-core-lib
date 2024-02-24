@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>mcgcorelib</AssemblyName>
+    <Title>McGurkin Core Library</Title>
+    <Authors>tallman5</Authors>
+    <PackageProjectUrl>https://github.com/tallman5/mcg-core-lib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tallman5/mcg-core-lib</RepositoryUrl>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageIcon>m-128x128.png</PackageIcon>
+    <Copyright>© 2024, Joseph McGurkin</Copyright>
+    <Company>Company Name</Company>
+    <Product>McGurkin Core Library</Product>
+    <Description>Product Description</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="m-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
