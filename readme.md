@@ -1,2 +1,2 @@
 # Core Library
-Contains frequently resuded code.
+Contains frequently reused code.
