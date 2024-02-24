@@ -13,9 +13,9 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>m-128x128.png</PackageIcon>
     <Copyright>© 2024, Joseph McGurkin</Copyright>
-    <Company>Company Name</Company>
-    <Product>McGurkin Core Library</Product>
-    <Description>Product Description</Description>
+    <Product>McG Core Library</Product>
+    <Description>Stuff frequently used in many projects</Description>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +27,13 @@
     <EmbeddedResource Include="Tools\StructGenerator\StructTemplate.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
