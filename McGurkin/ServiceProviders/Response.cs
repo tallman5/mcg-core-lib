@@ -15,7 +15,7 @@
     }
 
     [System.Diagnostics.DebuggerStepThrough]
-    public partial class Response : IResponse
+    public partial class Response(Guid responseId, Guid requestId) : IResponse
     {
         public void AppendMessage(Exception ex)
         {
@@ -39,22 +39,15 @@
             SystemMessage += message;
         }
 
-        public virtual Guid RequestId { get; set; }
+        public virtual Guid RequestId { get; set; } = requestId;
 
         public Response() : this(Guid.NewGuid(), Guid.Empty) { }
 
         public Response(Guid responseId) : this(responseId, Guid.Empty) { }
 
-        public Response(Guid responseId, Guid requestId)
-        {
-            ResponseId = responseId;
-            RequestId = requestId;
-            ResponseType = ResponseTypes.Success;
-        }
+        public virtual Guid ResponseId { get; set; } = responseId;
 
-        public virtual Guid ResponseId { get; set; }
-
-        public ResponseType ResponseType { get; set; }
+        public ResponseType ResponseType { get; set; } = ResponseTypes.Success;
 
         public virtual string? SystemMessage { get; set; }
 

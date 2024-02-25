@@ -1,4 +1,5 @@
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace {{Namespace}}
 {
@@ -163,36 +164,25 @@ namespace {{Namespace}}
 {{PluralStaticPublic}}
     }
 
-    public class {{StructSingular}}JsonConverter : JsonConverter
+    public class {{StructSingular}}JsonConverter: JsonConverter<{{StructSingular}}>
     {
-        public override bool CanConvert(Type objectType)
+        public override {{StructSingular}} Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return objectType == typeof({{StructSingular}});
-        }
-
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.String)
+            if (reader.TokenType == JsonTokenType.String)
             {
-                string? val = reader.Value as string;
+                string? val = reader.GetString();
                 if (!string.IsNullOrWhiteSpace(val))
                 {
                     {{StructSingular}} returnValue = ({{StructSingular}})val;
                     return returnValue;
                 }
             }
-            throw new JsonSerializationException("Expected a valid string value.");
+            throw new JsonException("Expected a valid string value.");
         }
 
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, {{StructSingular}} value, JsonSerializerOptions options)
         {
-            if (null != value)
-            {
-                var toWrite = (ResponseType)value;
-                writer.WriteValue(toWrite.ToString());
-                return;
-            }
-            throw new JsonSerializationException("Expected a valid object.");
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

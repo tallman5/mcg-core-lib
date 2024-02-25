@@ -1,3 +1,4 @@
+using McGurkin.ComponentModel;
 using McGurkin.Runtime.Serialization;
 using McGurkin.ServiceProviders;
 using McGurkin.Tools.StructGenerator;
@@ -35,6 +36,15 @@ namespace McGurkin.Test
         }
 
         [TestMethod]
+        public void SerializationTest()
+        {
+            var rqString = Serializer.ToString(rq);
+            var rqSerialized = Serializer.FromString<Request>(rqString);
+            Assert.AreEqual(rq.RequestId, rqSerialized.RequestId);
+            Assert.AreEqual(rq.Timestamp, rqSerialized.Timestamp);
+        }
+
+        [TestMethod]
         public void StructGeneratorTest()
         {
             var settings = new StructGeneratorSettings();
@@ -48,15 +58,6 @@ namespace McGurkin.Test
             string s = "Warning";
             ResponseType rt = ResponseType.Parse(s);
             Assert.IsNotNull(rt);
-        }
-
-        [TestMethod]
-        public void TestSerialization()
-        {
-            var rqString = Serializer.ToString(rq);
-            var rqSerialized = Serializer.FromString<Request>(rqString);
-            Assert.AreEqual(rq.RequestId, rqSerialized.RequestId);
-            Assert.AreEqual(rq.Timestamp, rqSerialized.Timestamp);
         }
     }
 }

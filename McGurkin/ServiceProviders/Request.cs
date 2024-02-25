@@ -8,18 +8,12 @@
     }
 
     [System.Diagnostics.DebuggerStepThrough]
-    public partial class Request : IRequest
+    public partial class Request(Guid requestId) : IRequest
     {
         public Request() : this(Guid.NewGuid()) { }
 
-        public Request(Guid requestId)
-        {
-            RequestId = requestId;
-            Timestamp = DateTime.Now;
-        }
+        public virtual Guid RequestId { get; set; } = requestId;
 
-        public virtual Guid RequestId { get; set; }
-
-        public DateTimeOffset Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; } = DateTime.Now;
     }
 }

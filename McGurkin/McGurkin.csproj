@@ -43,10 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="m-128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

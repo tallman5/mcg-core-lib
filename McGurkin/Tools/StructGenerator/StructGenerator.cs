@@ -66,7 +66,7 @@ namespace McGurkin.Tools.StructGenerator
                     i++;
                 }
 
-                if (returnValue.Length > 4) returnValue = returnValue.Substring(0, returnValue.Length - 4);
+                if (returnValue.Length > 4) returnValue = returnValue[..^4];
                 return returnValue;
             }
         }
@@ -82,7 +82,7 @@ namespace McGurkin.Tools.StructGenerator
                     returnValue += template;
                 }
 
-                if (returnValue.Length > 2) returnValue = returnValue.Substring(0, returnValue.Length - 2);
+                if (returnValue.Length > 2) returnValue = returnValue[..^2];
                 return returnValue;
             }
         }

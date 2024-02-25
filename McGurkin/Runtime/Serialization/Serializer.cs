@@ -1,86 +1,53 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+﻿using System.Text.Json;
 
 namespace McGurkin.Runtime.Serialization
 {
-    /// <summary>
-    /// The Serializer is simply helper functions for serializing and deserializing objects.
-    /// Newtonsoft cis used since the MS functions do not automatically pick up properties 
-    /// on derived classes extending base classes.
-    /// </summary>
     public class Serializer
     {
-        public static T CopyObject<T>(object o)
+        public static T Copy<T>(object o)
         {
-            var oJson = ToString(o);
-            var returnValue = FromString<T>(oJson);
-            return returnValue;
-        }
-
-        public static object FromString(string s)
-        {
-            var returnValue = JsonConvert.DeserializeObject(s, Settings);
-            if (null == returnValue)
-                throw new Exception("An error occurred deserializing");
-            return returnValue;
-        }
-
-        public static object FromString(string s, JsonSerializerSettings settings)
-        {
-            var returnValue = JsonConvert.DeserializeObject(s, settings);
-            if (null == returnValue)
-                throw new Exception("An error occurred deserializing");
+            var objJson = ToString(o);
+            var returnValue = FromString<T>(objJson);
             return returnValue;
         }
 
         public static T FromString<T>(string s)
         {
-            return FromString<T>(s, Settings);
-        }
-
-        public static T FromString<T>(string s, JsonSerializerSettings settings)
-        {
-            var returnValue = JsonConvert.DeserializeObject<T>(s, settings);
-            if (null == returnValue)
-                throw new Exception("An error occurred deserialzing");
+            var returnValue = FromString<T>(s, Options);
             return returnValue;
         }
 
-        private static JsonSerializerSettings? _Settings;
-        public static JsonSerializerSettings Settings
+        public static T FromString<T>(string s, JsonSerializerOptions options)
+        {
+            var returnValue = JsonSerializer.Deserialize<T>(s, options)
+                ?? throw new Exception("Could not deserialize string.");
+            return returnValue;
+        }
+
+        private static JsonSerializerOptions? _Options;
+        public static JsonSerializerOptions Options
         {
             get
             {
-                if (null == _Settings)
+                if (null == _Options)
                 {
-                    _Settings = new JsonSerializerSettings
+                    _Options = new JsonSerializerOptions
                     {
-                        ContractResolver = new DefaultContractResolver
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy()
-                        },
-                        NullValueHandling = NullValueHandling.Ignore,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        Formatting = Formatting.Indented,
-                        Converters = new JsonConverter[]
-                        {
-                            new StringEnumConverter(),
-                        },
+                        PropertyNameCaseInsensitive = true,
                     };
                 }
-                return _Settings;
+                return _Options;
             }
         }
 
         public static string ToString(object o)
         {
-            return ToString(o, Settings);
+            return ToString(o, Options);
         }
 
-        public static string ToString(object o, JsonSerializerSettings settings)
+        public static string ToString(object o, JsonSerializerOptions options)
         {
-            var returnValue = JsonConvert.SerializeObject(o, settings);
+            var returnValue = JsonSerializer.Serialize(o, options);
             return returnValue;
         }
     }
