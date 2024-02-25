@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="m-128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
