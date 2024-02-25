@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: windows-latest
 
     steps:
@@ -28,30 +28,7 @@ jobs:
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
-      run: dotnet pack /p:PackageVersion=1.0.${{ github.run_number }} --no-build -c Release -o nupkg
-
-    - name: List Contents
-      run: ls nupkg
-
-    - name: Upload NuGet package
-      uses: actions/upload-artifact@v2
-      with:
-        name: nupkg
-        path: nupkg/*.nupkg
-
-  deploy:
-    needs: build-and-test
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: nupkg
-        path: nupkg
+      run: dotnet pack /p:PackageVersion=8.0.${{ github.run_number }} --no-build -c Release -o nupkg
 
     - name: Publish to NuGet
       run: dotnet nuget push "nupkg/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
