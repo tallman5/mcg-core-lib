@@ -31,7 +31,13 @@ jobs:
       run: dotnet pack /p:PackageVersion=1.0.${{ github.run_number }} --no-build -c Release -o nupkg
 
     - name: List Contents
-      run: ls McGurkin/bin/Release
+      run: ls nupkg
+
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: nupkg/*.nupkg
 
   deploy:
     needs: build-and-test
@@ -45,6 +51,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: nupkg
+        path: nupkg
 
     - name: Publish to NuGet
       run: dotnet nuget push "nupkg/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
