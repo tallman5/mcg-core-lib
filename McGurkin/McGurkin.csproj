@@ -17,6 +17,7 @@
     <Description>Stuff frequently used in many projects</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>McG.CoreLib</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
