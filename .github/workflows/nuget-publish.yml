@@ -27,8 +27,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
-    - name: Print Package Version
-      run: echo "GitHub Run:$GITHUB_RUN_NUMBER"
+    - name: Print Run Number
+      run: echo "GitHub Run:${{ github.run_number }}"
 
     - name: Create Package Version
       run: echo "PACKAGE_VERSION=1.0.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
