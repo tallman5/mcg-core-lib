@@ -1,0 +1,57 @@
+name: Core Lib Build, Test and Deploy to NuGet
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x' # Replace with your project's required version
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore -c Release
+      
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+
+    - name: Pack
+      run: dotnet pack /p:PackageVersion=1.0.${{ github.run_number }} --no-build -c Release -o nupkg
+
+    - name: List Contents
+      run: ls nupkg
+
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: nupkg/*.nupkg
+
+  deploy:
+    needs: build-and-test
+    runs-on: windows-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: nupkg
+        path: nupkg
+
+    - name: Publish to NuGet
+      run: dotnet nuget push "nupkg/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
