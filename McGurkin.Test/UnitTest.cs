@@ -1,4 +1,5 @@
 using McGurkin.ComponentModel;
+using McGurkin.Runtime.Caching;
 using McGurkin.Runtime.Serialization;
 using McGurkin.ServiceProviders;
 using McGurkin.Tools.StructGenerator;
@@ -19,6 +20,18 @@ namespace McGurkin.Test
             ResponseType = (ResponseType)"Success",
             UserMessage = "Sample Response"
         };
+
+        [TestMethod]
+        public void CacheHelperTest()
+        {
+            var cacheKey = "rsKey";
+            CacheHelper.Set(cacheKey, rs, DateTimeOffset.Now.AddSeconds(5));
+            var rsFromCache = CacheHelper.Get<Response>(cacheKey);
+            Assert.IsNotNull(rsFromCache);
+            Thread.Sleep(6000);
+            rsFromCache = CacheHelper.Get<Response>(cacheKey);
+            Assert.IsNull(rsFromCache);
+        }
 
         [TestMethod]
         public void ResponseFromStringTest()

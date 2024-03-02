@@ -10,13 +10,12 @@ namespace McGurkin.Runtime.Caching
             MemoryCache.Default.Trim(100);
         }
 
-        public static T Get<T>(string cacheKey)
+        public static T? Get<T>(string cacheKey)
         {
-            var deflated = MemoryCache.Default.Get(cacheKey) as string;
-            if (string.IsNullOrWhiteSpace(deflated))
-                throw new Exception($"An item with a key of {cacheKey} was not found in the cache or it's an empty string.");
-            var returnValue = Serializer.FromCompressedString<T>(deflated);
-            return returnValue;
+            string? cachedObject = MemoryCache.Default.Get(cacheKey) as string;
+            if (!string.IsNullOrWhiteSpace(cachedObject))
+                return Serializer.FromCompressedString<T>(cachedObject);
+            return default;
         }
 
         public static void Remove(string cacheKey)
