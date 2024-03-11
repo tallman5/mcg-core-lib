@@ -34,6 +34,16 @@ namespace McGurkin.Test
         }
 
         [TestMethod]
+        public void DigitalSizeTest()
+        {
+            var sizeA = DigitalSize.FromGigabytes(1);
+            var sizeB = DigitalSize.FromMegabytes(1024);
+            Assert.AreEqual(sizeA, sizeB);
+            var sizeC = sizeA + sizeB;
+            Assert.IsTrue(sizeC.Bits == 17179869184);
+        }
+
+        [TestMethod]
         public void ResponseFromStringTest()
         {
             var rsString = "{\r\n  \"requestId\": \"1a423b94-d671-49c8-ad9e-35dbc4d65c28\",\r\n  \"responseId\": \"c0e9efc2-0903-4b33-a054-c3f42c54ae5c\",\r\n  \"responseType\": \"Success\",\r\n  \"userMessage\": \"Sample Response\"\r\n}";
