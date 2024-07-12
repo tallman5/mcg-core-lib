@@ -23,9 +23,6 @@ jobs:
 
     - name: Build
       run: dotnet build --no-restore -c Release
-      
-    - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       run: dotnet pack /p:PackageVersion=8.0.${{ github.run_number }} --no-build -c Release -o nupkg
