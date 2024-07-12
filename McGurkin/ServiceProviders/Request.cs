@@ -2,18 +2,29 @@
 {
     public partial interface IRequest
     {
-        Guid RequestId { get; set; }
-
         DateTimeOffset Timestamp { get; set; }
     }
 
     [System.Diagnostics.DebuggerStepThrough]
-    public partial class Request(Guid requestId) : IRequest
+    public partial class Request() : IRequest
     {
-        public Request() : this(Guid.NewGuid()) { }
-
-        public virtual Guid RequestId { get; set; } = requestId;
-
         public DateTimeOffset Timestamp { get; set; } = DateTime.Now;
+    }
+
+    public partial interface IRequest<T> : IRequest
+    {
+        T Query { get; set; }
+    }
+
+    public partial class Request<T> : IRequest<T>
+    {
+        public virtual required T Query { get; set; }
+
+        private readonly Request request = new();
+        public DateTimeOffset Timestamp
+        {
+            get => request.Timestamp;
+            set => request.Timestamp = value;
+        }
     }
 }

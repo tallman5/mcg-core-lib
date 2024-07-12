@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace McGurkin.Collections
+﻿namespace McGurkin.Collections
 {
     public class PermuteUtilities
     {

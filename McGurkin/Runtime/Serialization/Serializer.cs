@@ -1,6 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace McGurkin.Runtime.Serialization
 {
@@ -60,7 +61,10 @@ namespace McGurkin.Runtime.Serialization
                 {
                     _Options = new JsonSerializerOptions
                     {
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                         PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        Converters = { new JsonStringEnumConverter() }
                     };
                 }
                 return _Options;

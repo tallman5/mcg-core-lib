@@ -1,24 +1,23 @@
-using McGurkin.ComponentModel;
 using McGurkin.Runtime.Caching;
 using McGurkin.Runtime.Serialization;
 using McGurkin.ServiceProviders;
+using McGurkin.Services;
 using McGurkin.Tools.StructGenerator;
 
 namespace McGurkin.Test
 {
     [TestClass]
-    public class UnitTest
+    public class UnitTest : BaseTest
     {
         private static readonly IRequest rq = new Request
         {
-            RequestId = Guid.NewGuid(),
             Timestamp = DateTimeOffset.Now
         };
+
         private static readonly IResponse rs = new Response
         {
-            RequestId = Guid.NewGuid(),
             ResponseType = (ResponseType)"Success",
-            UserMessage = "Sample Response"
+            UserMessage = "Sample User Message"
         };
 
         [TestMethod]
@@ -43,6 +42,14 @@ namespace McGurkin.Test
             Assert.IsTrue(sizeC.Bits == 17179869184);
         }
 
+        //[TestMethod]
+        //public void EmailTest()
+        //{
+        //    var sender = new EmailSender(_configuration, _emailLogger);
+        //    var a = sender.SendEmailAsync("joseph@mcgurkin.net", "Testing", "This station is conducting a test.");
+        //    a.Wait();
+        //}
+
         [TestMethod]
         public void ResponseFromStringTest()
         {
@@ -63,7 +70,6 @@ namespace McGurkin.Test
         {
             var rqString = Serializer.ToString(rq);
             var rqSerialized = Serializer.FromString<Request>(rqString);
-            Assert.AreEqual(rq.RequestId, rqSerialized.RequestId);
             Assert.AreEqual(rq.Timestamp, rqSerialized.Timestamp);
         }
 
