@@ -9,6 +9,7 @@ namespace McGurkin.Services
     {
         public required From From { get; set; }
         public required string Host { get; set; }
+        public string To { get; set; } = string.Empty;
 
         public static EmailSenderConfig FromRootConfiguration(IConfiguration configuration)
         {
