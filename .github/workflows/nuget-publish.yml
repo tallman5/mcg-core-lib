@@ -1,4 +1,4 @@
-name: Core Lib Build, Test and Deploy to NuGet
+name: CD
 
 on:
   push:
