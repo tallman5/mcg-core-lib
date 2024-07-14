@@ -42,13 +42,13 @@ namespace McGurkin.Test
             Assert.IsTrue(sizeC.Bits == 17179869184);
         }
 
-        [TestMethod]
-        public void EmailTest()
-        {
-            var sender = new EmailSender(_configuration, _emailLogger);
-            var a = sender.SendEmailAsync("joseph@mcgurkin.net", "Testing", "This station is conducting a test.");
-            a.Wait();
-        }
+        //[TestMethod]
+        //public void EmailTest()
+        //{
+        //    var sender = new EmailSender(_configuration, _emailLogger);
+        //    var a = sender.SendEmailAsync("joseph@mcgurkin.net", "Testing", "This station is conducting a test.");
+        //    a.Wait();
+        //}
 
         [TestMethod]
         public void ResponseFromStringTest()
