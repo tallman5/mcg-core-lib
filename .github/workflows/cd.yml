@@ -1,31 +1,32 @@
 name: CD
 
 on:
-  push:
-    # branches: [ main ]
-  pull_request:
-    # branches: [ main ]
+  release:
+    types: [created]
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '8.0.x' # Replace with your project's required version
+        dotnet-version: '8.x'
 
     - name: Restore dependencies
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -c Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: Pack
-      run: dotnet pack /p:PackageVersion=8.0.${{ github.run_number }} --no-build -c Release -o nupkg
+      run: dotnet pack --configuration Release --no-build --output ./nupkg
 
     - name: Publish to NuGet
-      run: dotnet nuget push "**/McG.CoreLib.8.0.${{ github.run_number }}.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push "./nupkg/*.nupkg" --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
