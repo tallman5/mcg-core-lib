@@ -22,8 +22,8 @@ jobs:
       run: |
         TAG_NAME=${GITHUB_REF##*/}
         if [[ $TAG_NAME =~ ^v([0-9]+)\.([0-9]+)$ ]]; then
-          echo "::set-output name=major::${BASH_REMATCH[1]}"
-          echo "::set-output name=minor::${BASH_REMATCH[2]}"
+          echo "MAJOR=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+          echo "MINOR=${BASH_REMATCH[2]}" >> $GITHUB_ENV
         else
           echo "Invalid tag name"
           exit 1
@@ -31,16 +31,13 @@ jobs:
     
     - name: Get build number
       id: get_build_number
-      run: echo "::set-output name=patch::${GITHUB_RUN_NUMBER}"
+      run: echo "PATCH=${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
 
     - name: Set version
       id: set_version
       run: |
-        MAJOR=${{ steps.extract_version.outputs.major }}
-        MINOR=${{ steps.extract_version.outputs.minor }}
-        PATCH=${{ steps.get_build_number.outputs.patch }}
         VERSION="$MAJOR.$MINOR.$PATCH"
-        echo "##[set-env name=VERSION]$VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Restore dependencies
       run: dotnet restore
