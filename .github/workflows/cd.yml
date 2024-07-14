@@ -17,6 +17,31 @@ jobs:
       with:
         dotnet-version: '8.x'
 
+    - name: Extract version from release tag
+      id: extract_version
+      run: |
+        TAG_NAME=${GITHUB_REF##*/}
+        if [[ $TAG_NAME =~ ^v([0-9]+)\.([0-9]+)$ ]]; then
+          echo "::set-output name=major::${BASH_REMATCH[1]}"
+          echo "::set-output name=minor::${BASH_REMATCH[2]}"
+        else
+          echo "Invalid tag name"
+          exit 1
+        fi
+    
+    - name: Get build number
+      id: get_build_number
+      run: echo "::set-output name=patch::${GITHUB_RUN_NUMBER}"
+
+    - name: Set version
+      id: set_version
+      run: |
+        MAJOR=${{ steps.extract_version.outputs.major }}
+        MINOR=${{ steps.extract_version.outputs.minor }}
+        PATCH=${{ steps.get_build_number.outputs.patch }}
+        VERSION="$MAJOR.$MINOR.$PATCH"
+        echo "##[set-env name=VERSION]$VERSION"
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -24,7 +49,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./nupkg
+      run: dotnet pack --configuration Release --no-build --output ./nupkg /p:PackageVersion=${{ env.VERSION }}
 
     - name: Publish to NuGet
       env:
