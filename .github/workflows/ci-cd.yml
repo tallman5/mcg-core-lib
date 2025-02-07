@@ -17,13 +17,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.1'
+          dotnet-version: '8.0'
 
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release /p:Version=8.0.${{ github.run_number }}
+        run: dotnet build --no-restore --configuration Release /p:Version=8.1.${{ github.run_number }}
 
       - name: Test
         run: dotnet test --no-build --configuration Release --verbosity normal
