@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Mail;
 
@@ -9,11 +8,19 @@ namespace McGurkin.Services
     {
         public required From From { get; set; }
         public required string Host { get; set; }
-        public string To { get; set; } = string.Empty;
 
-        public static EmailSenderConfig FromRootConfiguration(IConfiguration configuration)
+        public static EmailSenderConfig GetEmpty()
         {
-            var returnValue = configuration.GetSection("EmailSenderConfig").Get<EmailSenderConfig>() ?? throw new Exception("Missing Email Sender Configuration section.");
+            var returnValue = new EmailSenderConfig
+            {
+                From = new From
+                {
+                    Address = "",
+                    DisplayName = "",
+                    Password = ""
+                },
+                Host = ""
+            };
             return returnValue;
         }
     }
@@ -25,9 +32,9 @@ namespace McGurkin.Services
         public required string Password { get; set; }
     }
 
-    public partial class EmailSender(IConfiguration config, ILogger<EmailSender> logger) : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender
+    public partial class EmailSender(EmailSenderConfig config, ILogger<EmailSender> logger) : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender
     {
-        private readonly EmailSenderConfig _config = EmailSenderConfig.FromRootConfiguration(config);
+        private readonly EmailSenderConfig _config = config;
         private readonly ILogger<EmailSender> _logger = logger;
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -46,7 +53,7 @@ namespace McGurkin.Services
                 Port = 587,
                 Host = _config.Host,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                EnableSsl = true
+                EnableSsl = true,
             };
 
             await client.SendMailAsync(msg);

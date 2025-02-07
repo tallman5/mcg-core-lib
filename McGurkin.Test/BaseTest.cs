@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Testing.Platform.Logging;
-using System.Reflection;
+
 namespace McGurkin.Test;
 
 [TestClass]
@@ -21,11 +21,8 @@ public class BaseTest
 
     public BaseTest()
     {
-        var settingsJson = Environment.GetEnvironmentVariable("TEST_SETTINGS_JSON");
-
-        var builder = (string.IsNullOrWhiteSpace(settingsJson))
-            ? new ConfigurationBuilder().AddUserSecrets(Assembly.GetExecutingAssembly())
-            : new ConfigurationBuilder().AddEnvironmentVariables();
+        var builder = new ConfigurationBuilder()
+            .AddUserSecrets<McGurkin.Constants>();
 
         _configuration = builder.Build();
 

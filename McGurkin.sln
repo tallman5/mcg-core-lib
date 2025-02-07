@@ -5,7 +5,12 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "McGurkin", "McGurkin\McGurkin.csproj", "{0544E04A-08B2-4235-AF77-747310F9CAC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McGurkin.Test", "McGurkin.Test\McGurkin.Test.csproj", "{E08020FF-E268-41AF-9026-9B1DA1013C5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "McGurkin.Test", "McGurkin.Test\McGurkin.Test.csproj", "{E08020FF-E268-41AF-9026-9B1DA1013C5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9A57AB4B-D4FA-4FE5-846E-2C14DA0A886D}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
