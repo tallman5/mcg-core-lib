@@ -39,7 +39,7 @@ public class CorrelationIdMiddleware(RequestDelegate next)
         context.Response.OnStarting(() =>
         {
             if (!context.Response.Headers.ContainsKey(Constants.X_CORRELATION_ID))
-                context.Response.Headers.Add(Constants.X_CORRELATION_ID, cid.ToString());
+                context.Response.Headers.Append(Constants.X_CORRELATION_ID, cid.ToString());
             return Task.CompletedTask;
         });
 
