@@ -12,7 +12,7 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>m-128x128.png</PackageIcon>
-    <Copyright>© 2024, Joseph McGurkin</Copyright>
+    <Copyright>© 2024-2025, Joseph McGurkin</Copyright>
     <Product>McG Core Library</Product>
     <Description>Stuff frequently used in many projects</Description>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
