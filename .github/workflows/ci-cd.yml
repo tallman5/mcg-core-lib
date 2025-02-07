@@ -30,3 +30,9 @@ jobs:
 
       - name: Pack
         run: dotnet pack --no-build --configuration Release /p:PackageVersion=8.1.${{ github.run_number }} -o ./nupkg
+
+      - name: Push to NuGet
+        if: success()
+        run: dotnet nuget push "./nupkg/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
