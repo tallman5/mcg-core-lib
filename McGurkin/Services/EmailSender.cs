@@ -1,10 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Mail;
 
 namespace McGurkin.Services
 {
-    public class EmailSenderConfig
+    public interface IEmailSenderConfig
+    {
+        From From { get; set; }
+        string Host { get; set; }
+    }
+
+    public class EmailSenderConfig : IEmailSenderConfig
     {
         public required From From { get; set; }
         public required string Host { get; set; }
@@ -32,16 +39,24 @@ namespace McGurkin.Services
         public required string Password { get; set; }
     }
 
-    public partial class EmailSender(EmailSenderConfig config, ILogger<EmailSender> logger) : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender
+    public partial class EmailSender : Microsoft.AspNetCore.Identity.UI.Services.IEmailSender
     {
-        private readonly EmailSenderConfig _config = config;
-        private readonly ILogger<EmailSender> _logger = logger;
+        private readonly EmailSenderConfig _emailSenderConfig;
+        private readonly ILogger<EmailSender> _logger;
+
+        public EmailSender(IConfiguration config, ILogger<EmailSender> logger)
+        {
+            _emailSenderConfig = EmailSenderConfig.GetEmpty();
+            config.GetRequiredSection("EmailSenderConfig").Bind(_emailSenderConfig);
+
+            _logger = logger;
+        }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             MailMessage msg = new();
             msg.To.Add(new MailAddress(email));
-            msg.From = new MailAddress(_config.From.Address, _config.From.DisplayName);
+            msg.From = new MailAddress(_emailSenderConfig.From.Address, _emailSenderConfig.From.DisplayName);
             msg.Subject = subject;
             msg.Body = htmlMessage;
             msg.IsBodyHtml = true;
@@ -49,9 +64,9 @@ namespace McGurkin.Services
             SmtpClient client = new()
             {
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_config.From.Address, _config.From.Password),
+                Credentials = new NetworkCredential(_emailSenderConfig.From.Address, _emailSenderConfig.From.Password),
                 Port = 587,
-                Host = _config.Host,
+                Host = _emailSenderConfig.Host,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 EnableSsl = true,
             };
