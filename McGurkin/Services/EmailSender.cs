@@ -5,13 +5,7 @@ using System.Net.Mail;
 
 namespace McGurkin.Services
 {
-    public interface IEmailSenderConfig
-    {
-        From From { get; set; }
-        string Host { get; set; }
-    }
-
-    public class EmailSenderConfig : IEmailSenderConfig
+    public class EmailSenderConfig
     {
         public required From From { get; set; }
         public required string Host { get; set; }
