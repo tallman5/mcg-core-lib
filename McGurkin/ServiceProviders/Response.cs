@@ -36,39 +36,30 @@
         public virtual string? UserMessage { get; set; }
 
         public List<string> Errors { get; } = [];
-    }
 
-    public partial interface IResponse<T> : IResponse
-    {
-        T? Data { get; set; }
+        public static Response Success(string message = "") => new() { UserMessage = message };
+        public static Response Error(string message, IEnumerable<string>? errors = null)
+        {
+            var response = new Response
+            {
+                ResponseType = ResponseTypes.Error,
+                UserMessage = message
+            };
+
+            if (errors != null)
+            {
+                response.Errors.AddRange(errors);
+            }
+
+            return response;
+        }
+
     }
 
     [System.Diagnostics.DebuggerStepThrough]
-    public partial class Response<T> : IResponse<T>
+    public class Response<T> : Response
     {
-        public virtual T? Data { get; set; }
-
-        private readonly Response response = new();
-
-        public ResponseType ResponseType
-        {
-            get => response.ResponseType;
-            set => response.ResponseType = value;
-        }
-
-        public string? SystemMessage
-        {
-            get => response.SystemMessage;
-            set => response.SystemMessage = value;
-        }
-
-        public string? UserMessage
-        {
-            get => response.UserMessage;
-            set => response.UserMessage = value;
-        }
-
-        public List<string> Errors { get; } = [];
+        public T? Data { get; set; }
 
         public static Response<T> Success(T data, string message = "") => new()
         {
@@ -76,7 +67,7 @@
             UserMessage = message
         };
 
-        public static Response<T> Error(string message, IEnumerable<string>? errors = null)
+        public new static Response<T> Error(string message, IEnumerable<string>? errors = null)
         {
             var response = new Response<T>
             {
@@ -91,6 +82,5 @@
 
             return response;
         }
-
     }
 }
