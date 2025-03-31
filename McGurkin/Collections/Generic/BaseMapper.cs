@@ -12,7 +12,7 @@ public class BaseMapper
     /// Initializes a new instance with the left to right mappings. The inverse, right to left will automatically be created.
     /// </summary>
     /// <param name="mappings">A Dictionary of left to right mappings.</param>
-    protected BaseMapper(Dictionary<string, string> mappings)
+    public BaseMapper(Dictionary<string, string> mappings)
     {
         leftToRightMappings = new Dictionary<string, string>(mappings, StringComparer.OrdinalIgnoreCase);
         rightToLeftMappings = leftToRightMappings.ToDictionary(kvp => kvp.Value, kvp => kvp.Key, StringComparer.OrdinalIgnoreCase);

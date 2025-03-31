@@ -38,17 +38,33 @@ public class Ui
             line += $", ETA: {endTime}";
         }
 
-        Console.CursorLeft = 0;
-        Console.Write(line);
-        if (progress >= total)
-            Console.WriteLine();
+        try
+        {
+            Console.CursorLeft = 0;
+            Console.Write(line);
+            if (progress >= total)
+                Console.WriteLine();
+        }
+        catch
+        {
+            // Ignore exceptions when the console window doesn't exist
+        }
     }
 
     public static int DrawSelectOptions(List<string> options)
     {
         int returnValue = -1;
         bool selectionChanging = true;
-        Console.CursorVisible = false;
+
+        try
+        {
+            Console.CursorVisible = false;
+        }
+        catch
+        {
+            // Ignore exceptions when the console window doesn't exist
+            return -1;
+        }
 
         DrawOptions(options, returnValue);
 

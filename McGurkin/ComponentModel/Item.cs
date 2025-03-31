@@ -16,7 +16,7 @@ public partial class Item(Guid id) : NotifyPropertyChanged, IEditableObject, IIt
     private bool isEditing = false;
 
     private object? _Backup;
-    protected object? Backup
+    public object? Backup
     {
         get
         {

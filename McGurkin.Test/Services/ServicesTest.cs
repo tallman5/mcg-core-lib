@@ -1,9 +1,10 @@
 ﻿using McGurkin.Services;
 
-namespace McGurkin.Test;
+namespace McGurkin.Test.Services;
 
+# if DEBUG
 [TestClass]
-public class IntegrationTest : BaseTest
+public class ServicesTest : BaseTest
 {
     [TestMethod]
     public async Task EmailTestAsync()
@@ -16,3 +17,4 @@ public class IntegrationTest : BaseTest
         }
     }
 }
+#endif
