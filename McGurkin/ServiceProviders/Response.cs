@@ -54,10 +54,11 @@
             Data = data
         };
 
-        public static Response<T> Error(IEnumerable<string>? errors = null)
+        public static Response<T> Error(T data, IEnumerable<string>? errors = null)
         {
             var response = new Response<T>
             {
+                Data = data,
                 ResponseType = ResponseTypes.Error,
             };
 
