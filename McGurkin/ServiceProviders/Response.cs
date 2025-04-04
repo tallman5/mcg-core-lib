@@ -3,47 +3,23 @@
     public partial interface IResponse
     {
         ResponseType ResponseType { get; set; }
-        string? SystemMessage { get; set; }
-        string? UserMessage { get; set; }
-        List<string> Errors { get; }
+        List<string> Errors { get; set; }
     }
 
     [System.Diagnostics.DebuggerStepThrough]
     public partial class Response() : IResponse
     {
-        public void AppendMessage(Exception ex)
-        {
-            AppendMessage(ex.ToString());
-            ResponseType = ResponseTypes.Error;
-        }
-
-        public void AppendMessage(string format, params object[] args)
-        {
-            AppendMessage(string.Format(format, args));
-        }
-
-        public void AppendMessage(string message)
-        {
-            if (!string.IsNullOrWhiteSpace(SystemMessage))
-                SystemMessage += "\r\n";
-            SystemMessage += message;
-        }
-
         public ResponseType ResponseType { get; set; } = ResponseTypes.Success;
 
-        public virtual string? SystemMessage { get; set; }
+        public List<string> Errors { get; set; } = [];
 
-        public virtual string? UserMessage { get; set; }
+        public static Response Success() => new();
 
-        public List<string> Errors { get; } = [];
-
-        public static Response Success(string message = "") => new() { UserMessage = message };
-        public static Response Error(string message, IEnumerable<string>? errors = null)
+        public static Response Error(IEnumerable<string>? errors = null)
         {
             var response = new Response
             {
                 ResponseType = ResponseTypes.Error,
-                UserMessage = message
             };
 
             if (errors != null)
@@ -56,23 +32,33 @@
 
     }
 
-    [System.Diagnostics.DebuggerStepThrough]
-    public class Response<T> : Response
+    public interface IResponse<T> : IResponse
     {
+        T? Data { get; set; }
+    }
+
+    [System.Diagnostics.DebuggerStepThrough]
+    public class Response<T> : IResponse, IResponse<T>
+    {
+        private Response response { get; set; } = new();
+
         public T? Data { get; set; }
 
-        public static Response<T> Success(T data, string message = "") => new()
+        public ResponseType ResponseType { get => response.ResponseType; set => response.ResponseType = value; }
+
+        public List<string> Errors { get => response.Errors; set => response.Errors = value; }
+
+
+        public static Response<T> Success(T data) => new()
         {
-            Data = data,
-            UserMessage = message
+            Data = data
         };
 
-        public new static Response<T> Error(string message, IEnumerable<string>? errors = null)
+        public static Response<T> Error(IEnumerable<string>? errors = null)
         {
             var response = new Response<T>
             {
                 ResponseType = ResponseTypes.Error,
-                UserMessage = message
             };
 
             if (errors != null)
