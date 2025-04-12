@@ -58,5 +58,19 @@ public class CacheHelperTests
         // Assert
         Assert.AreEqual(value, CacheHelper.Get<string>("key"));
     }
+
+    [TestMethod]
+    public void Should_Get_Normalized_Hach_Value()
+    {
+        // Arrange
+        var value = "https://example.com/api/data?userId=123&sort=asc";
+
+        // Act
+        var hashedValue = CacheHelper.GetSafeCacheKeyFromUrl(value);
+
+        // Assert
+        Assert.IsNotNull(hashedValue);
+        Assert.IsTrue(hashedValue.Length > 0);
+    }
 }
 
