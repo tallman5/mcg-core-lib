@@ -1,5 +1,4 @@
-﻿using McGurkin.Runtime.Serialization;
-using System.Runtime.Caching;
+﻿using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -14,9 +13,9 @@ public class CacheHelper
 
     public static T? Get<T>(string cacheKey)
     {
-        string? cachedObject = MemoryCache.Default.Get(cacheKey) as string;
-        if (!string.IsNullOrWhiteSpace(cachedObject))
-            return Serializer.FromCompressedString<T>(cachedObject);
+        object? cachedObject = MemoryCache.Default.Get(cacheKey);
+        if (cachedObject is T cachedValue)
+            return cachedValue;
         return default;
     }
 
@@ -57,7 +56,6 @@ public class CacheHelper
 
     public static void Set(string cacheKey, object o, DateTimeOffset expiration)
     {
-        var deflated = Serializer.ToCompressedString(o);
-        MemoryCache.Default.Set(cacheKey, deflated, expiration);
+        MemoryCache.Default.Set(cacheKey, o, expiration);
     }
 }
